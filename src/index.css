@@ -12,7 +12,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-image: url('./bg.png');
-  background-size: 200% 150%;
+  background-size: 200% 180%;
   animation-duration: 3s;
   animation-timing-function: linear;
   animation-delay: 0s;

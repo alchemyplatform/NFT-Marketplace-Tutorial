@@ -2,6 +2,7 @@ import Navbar from "./Navbar";
 import { useState } from "react";
 import { uploadFileToIPFS, uploadJSONToIPFS } from "../pinata";
 import Web3Modal from 'web3modal';
+import Marketplace from '../Marketplace.json';
 
 export default function SellNFT () {
     const [formParams, updateFormParams] = useState({ name: '', description: '', price: ''});
@@ -46,22 +47,23 @@ export default function SellNFT () {
 
     async function listNFT(e) {
         e.preventDefault();
-
-        const metadataURL = uploadMetadataToIPFS();
-        //const web3Modal = new Web3Modal();
-        //const connection = await web3Modal.connect()
-        //const provider = new ethers.providers.Web3Provider(connection)
-        const signer = ethers.provider.getSigner();
-        /*console.log("signer", signer);
+        //Upload data to IPFS
+        const metadataURL = uploadMetadataToIPFS();//"https://gateway.pinata.cloud/ipfs/QmTEa9c2C3Demj73TKbyZPHGLMytnMYqPtPfDa3RuDQ82V"
         
-        const address = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
-        let contract = new ethers.Contract(address, "", signer)
-        let listingPrice = 0.01;
-        listingPrice = listingPrice.toString();
-        let transaction = await contract.createToken(metadataURL, formParams.price, {value: listingPrice});
-        await transaction.wait();*/
+        //After adding your Hardhat network to your metamask, this code will get providers and signers
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        //Pull the deployed contract instance
+        let contract = new ethers.Contract(Marketplace.address, Marketplace.abi, signer)
 
-        //console.log("txn success", transaction);
+        //create an NFT Token
+        const price = ethers.utils.parseUnits(formParams.price, 'ether')
+        let listingPrice = await contract.getListPrice()
+        listingPrice = listingPrice.toString()
+        let transaction = await contract.createToken(metadataURL, price, { value: listingPrice })
+        await transaction.wait()
+
+        console.log("txn success", transaction);
     }
 
     return (
