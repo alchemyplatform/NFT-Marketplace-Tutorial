@@ -29,9 +29,10 @@ export default function SellNFT () {
         const {name, description, price} = formParams;
         if( !name || !description || !price || !fileURL)
             return;
-        const nftJSON = JSON.stringify({
-            name, description, image: fileURL
-        });
+            
+        const nftJSON = {
+            name, description, price, image: fileURL
+        }
 
         try {
             const response = await uploadJSONToIPFS(nftJSON);
