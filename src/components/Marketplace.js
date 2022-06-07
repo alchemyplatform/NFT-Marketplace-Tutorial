@@ -1,6 +1,22 @@
 import Navbar from "./Navbar";
 import NFTTile from "./NFTTile";
+import MarketplaceJSON from "../Marketplace.json";
 
+async function getAllNFTs() {
+    const ethers = require("ethers");
+    //After adding your Hardhat network to your metamask, this code will get providers and signers
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    //Pull the deployed contract instance
+    let contract = new ethers.Contract(MarketplaceJSON.address, MarketplaceJSON.abi, signer)
+    console.log("contrct is", contract);
+    console.log(provider, signer)
+    //create an NFT Token
+    let transaction = await contract.getAllNFTs()
+    //await transaction.wait()
+
+    console.log("txn success", transaction);
+}
 export function getTiles(address) {
     console.log("address is", address);
     const data = [
@@ -43,6 +59,8 @@ export function getTiles(address) {
 
 function Marketplace (address) {
     const abc = getTiles(address.address);
+    const NFTs = getAllNFTs();
+
     return (
         <div>
             <Navbar></Navbar>

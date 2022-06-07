@@ -48,18 +48,18 @@ export default function SellNFT () {
     async function listNFT(e) {
         e.preventDefault();
         //Upload data to IPFS
-        const metadataURL = uploadMetadataToIPFS();//"https://gateway.pinata.cloud/ipfs/QmTEa9c2C3Demj73TKbyZPHGLMytnMYqPtPfDa3RuDQ82V"
-        
+        const metadataURL = await uploadMetadataToIPFS();//"https://gateway.pinata.cloud/ipfs/QmTEa9c2C3Demj73TKbyZPHGLMytnMYqPtPfDa3RuDQ82V"
         //After adding your Hardhat network to your metamask, this code will get providers and signers
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
         //Pull the deployed contract instance
         let contract = new ethers.Contract(Marketplace.address, Marketplace.abi, signer)
-
+        console.log(provider, signer)
         //create an NFT Token
         const price = ethers.utils.parseUnits(formParams.price, 'ether')
         let listingPrice = await contract.getListPrice()
         listingPrice = listingPrice.toString()
+        console.log(listingPrice);
         let transaction = await contract.createToken(metadataURL, price, { value: listingPrice })
         await transaction.wait()
 

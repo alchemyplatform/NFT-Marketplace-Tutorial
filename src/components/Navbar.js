@@ -14,11 +14,11 @@ function Navbar() {
       <div className="">
         <nav className="w-screen">
           <ul className='flex items-end justify-between py-3 bg-transparent text-white pr-5'>
-          <li className='flex items-end ml-5 border-b-2 pb-2'>
+          <li className='flex items-end ml-5 pb-2'>
             <Link to="/">
             <img src={logo} alt="" width={45} height={45} className="inline-block"/>
             <div className='inline-block font-bold text-xl'>
-              xieMarketplace
+              lchemy NFT Marketplace
             </div>
             </Link>
           </li>
