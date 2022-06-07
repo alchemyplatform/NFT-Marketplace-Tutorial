@@ -33,9 +33,12 @@ async function connectWebsite() {
 
   useEffect(() => {
     let val = window.ethereum.isConnected();
-    toggleConnect(val);
+    console.log("this ran", val)
     if(val)
+    {
+      toggleConnect(val);
       updateButton();
+    }
   });
     return (
       <div className="">

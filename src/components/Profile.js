@@ -78,7 +78,7 @@ export default function Profile () {
             </div>
             <div className="flex flex-col text-center md:text-2xl mt-11 text-white">
                 <h2 className="font-bold">Your NFTs</h2>
-                <div className="flex justify-center">
+                <div className="flex justify-center flex-wrap">
                     {data.map((value, index) => {
                     return <NFTTile data={value} key={index}></NFTTile>;
                     })}
