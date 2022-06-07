@@ -29,7 +29,7 @@ export default function Profile () {
             const tokenURI = await contract.tokenURI(i.tokenId);
             let meta = await axios.get(tokenURI);
             meta = meta.data;
-            console.log("metadata is ", meta, typeof meta, meta.name, meta.description);
+
             let price = ethers.utils.formatUnits(i.price.toString(), 'ether');
             let item = {
                 price,
@@ -55,11 +55,6 @@ export default function Profile () {
     if(!dataFetched)
         getNFTData(tokenId);
 
-    console.log(data.length)
-    //var address = 'bxe81Bf5A757CB4f7F82a23b1e59bE45c33c5b13';
-    var num = 14;
-    var val = 0.014;
-    console.log(data);
     //var abc = getTiles(address);
     return (
         <div>
