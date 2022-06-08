@@ -17,7 +17,7 @@ export default function SellNFT () {
         try {
             const response = await uploadFileToIPFS(file);
             if(response.success === true) {
-                console.log("yoyo", response.pinataUrl)
+                console.log("Uploaded image to Pinata: ", response.pinataURL)
                 setFileURL(response.pinataURL);
             }
         }
@@ -38,7 +38,7 @@ export default function SellNFT () {
         try {
             const response = await uploadJSONToIPFS(nftJSON);
             if(response.success === true){
-                console.log("yoyooyo", response)
+                console.log("Uploaded JSON to Pinata: ", response)
                 return response.pinataURL;
             }
         }
@@ -49,28 +49,26 @@ export default function SellNFT () {
 
     async function listNFT(e) {
         e.preventDefault();
+        
         //Upload data to IPFS
         try {
-        const metadataURL = await uploadMetadataToIPFS();//"https://gateway.pinata.cloud/ipfs/QmTEa9c2C3Demj73TKbyZPHGLMytnMYqPtPfDa3RuDQ82V"
-        //After adding your Hardhat network to your metamask, this code will get providers and signers
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-        //Pull the deployed contract instance
-        updateMessage("Please wait.. uploading (upto 5 mins)")
-        let contract = new ethers.Contract(Marketplace.address, Marketplace.abi, signer)
-        console.log(provider, signer)
-        //create an NFT Token
-        const price = ethers.utils.parseUnits(formParams.price, 'ether')
-        let listingPrice = await contract.getListPrice()
-        listingPrice = listingPrice.toString()
-        console.log(listingPrice);
-        let transaction = await contract.createToken(metadataURL, price, { value: listingPrice })
-        await transaction.wait()
+            const metadataURL = await uploadMetadataToIPFS();
+            //After adding your Hardhat network to your metamask, this code will get providers and signers
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+            //Pull the deployed contract instance
+            updateMessage("Please wait.. uploading (upto 5 mins)")
+            let contract = new ethers.Contract(Marketplace.address, Marketplace.abi, signer)
+            //create an NFT Token
+            const price = ethers.utils.parseUnits(formParams.price, 'ether')
+            let listingPrice = await contract.getListPrice()
+            listingPrice = listingPrice.toString()
+            let transaction = await contract.createToken(metadataURL, price, { value: listingPrice })
+            await transaction.wait()
 
-        console.log("txn success", transaction);
-        alert("Successfully listed your NFT!");
-        updateMessage("");
-        updateFormParams({ name: '', description: '', price: ''});
+            alert("Successfully listed your NFT!");
+            updateMessage("");
+            updateFormParams({ name: '', description: '', price: ''});
         }
         catch(e) {
             alert("Upload error", e)
@@ -82,21 +80,21 @@ export default function SellNFT () {
         <Navbar></Navbar>
         <div className="flex flex-col place-items-center mt-10" id="nftForm">
             <form className="bg-white shadow-md rounded px-8 pt-4 pb-8 mb-4">
-            <h3 class="text-center font-bold text-purple-500 mb-8">Upload your NFT to the marketplace</h3>
+            <h3 className="text-center font-bold text-purple-500 mb-8">Upload your NFT to the marketplace</h3>
                 <div className="mb-4">
-                    <label className="block text-purple-500 text-sm font-bold mb-2" for="name">NFT Name</label>
+                    <label className="block text-purple-500 text-sm font-bold mb-2" htmlFor="name">NFT Name</label>
                     <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="Axie#4563" onChange={e => updateFormParams({...formParams, name: e.target.value})} value={formParams.name}></input>
                 </div>
                 <div className="mb-6">
-                    <label className="block text-purple-500 text-sm font-bold mb-2" for="description">NFT Description</label>
+                    <label className="block text-purple-500 text-sm font-bold mb-2" htmlFor="description">NFT Description</label>
                     <textarea className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" cols="40" rows="5" id="description" type="text" placeholder="Axie Infinity Collection" value={formParams.description} onChange={e => updateFormParams({...formParams, description: e.target.value})}></textarea>
                 </div>
                 <div className="mb-6">
-                    <label className="block text-purple-500 text-sm font-bold mb-2" for="price">Price (in ETH)</label>
+                    <label className="block text-purple-500 text-sm font-bold mb-2" htmlFor="price">Price (in ETH)</label>
                     <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="number" placeholder="Min 0.01 ETH" step="0.01" value={formParams.price} onChange={e => updateFormParams({...formParams, price: e.target.value})}></input>
                 </div>
                 <div>
-                    <label className="block text-purple-500 text-sm font-bold mb-2" for="image">Upload Image</label>
+                    <label className="block text-purple-500 text-sm font-bold mb-2" htmlFor="image">Upload Image</label>
                     <input type={"file"} onChange={OnChangeFile}></input>
                 </div>
                 <br></br>

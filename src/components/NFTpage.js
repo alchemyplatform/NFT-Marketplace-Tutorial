@@ -20,9 +20,7 @@ async function getNFTData(tokenId) {
     const tokenURI = await contract.tokenURI(tokenId);
     let meta = await axios.get(tokenURI);
     meta = meta.data;
-    console.log(meta);
-    console.log("metadata is ", meta, typeof meta, meta.name, meta.description);
-    //let price = ethers.utils.formatUnits(meta.price.toString(), 'ether');
+
     let item = {
         price: meta.price,
         tokenId: meta.tokenId,

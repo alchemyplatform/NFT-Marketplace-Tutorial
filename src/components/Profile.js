@@ -19,7 +19,6 @@ export default function Profile () {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
         const addr = await signer.getAddress();
-        //console.log(provider, signer, addr)
         //Pull the deployed contract instance
         let contract = new ethers.Contract(MarketplaceJSON.address, MarketplaceJSON.abi, signer)
         //create an NFT Token
