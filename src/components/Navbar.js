@@ -68,25 +68,6 @@ async function connectWebsite() {
     })
   });
 
-  function underlineNavItem(className) {
-/*    if(typeof className === undefined)
-      return;
-    if(document.getElementById('marketplace') == null)
-      return;
-    let set = ['marketplace', 'list', 'profile'];
-    const el = document.getElementById(className);
-    el.classList.add('border-b-2');
-    console.log("add", el);
-    set = set.filter(n => ![className].includes(n));
-
-    set.map((val, i) => {
-      const el2 = document.getElementById(val);
-      el2.classList.remove('border-b-2');
-      console.log("remove", el2);
-      return;
-    });*/
-    
-  }
     return (
       <div className="">
         <nav className="w-screen">
@@ -101,15 +82,33 @@ async function connectWebsite() {
           </li>
           <li className='w-2/6'>
             <ul className='lg:flex justify-between font-bold mr-10 text-lg'>
-              <li className='hover:border-b-2 hover:pb-0 p-2' id="marketplace" onClick={() => underlineNavItem('marketplace')}>
+              {location.pathname === "/" ? 
+              <li className='border-b-2 hover:pb-0 p-2'>
                 <Link to="/">Marketplace</Link>
               </li>
-              <li className='hover:border-b-2 hover:pb-0 p-2' id="list" onClick={() => underlineNavItem('list')}>
-                <Link to="/sellNFT">List my NFT</Link>
+              :
+              <li className='hover:border-b-2 hover:pb-0 p-2'>
+                <Link to="/">Marketplace</Link>
+              </li>              
+              }
+              {location.pathname === "/sellNFT" ? 
+              <li className='border-b-2 hover:pb-0 p-2'>
+                <Link to="/sellNFT">List My NFT</Link>
               </li>
-              <li className='hover:border-b-2 hover:pb-0 p-2' id="profile" onClick={() => underlineNavItem('profile')}>
+              :
+              <li className='hover:border-b-2 hover:pb-0 p-2'>
+                <Link to="/sellNFT">List My NFT</Link>
+              </li>              
+              }              
+              {location.pathname === "/profile" ? 
+              <li className='border-b-2 hover:pb-0 p-2'>
                 <Link to="/profile">Profile</Link>
               </li>
+              :
+              <li className='hover:border-b-2 hover:pb-0 p-2'>
+                <Link to="/profile">Profile</Link>
+              </li>              
+              }  
               <li>
                 <button className="enableEthereumButton bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm" onClick={connectWebsite}>{connected? "Connected":"Connect Wallet"}</button>
               </li>
