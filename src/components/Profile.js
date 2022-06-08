@@ -22,7 +22,8 @@ export default function Profile () {
         //Pull the deployed contract instance
         let contract = new ethers.Contract(MarketplaceJSON.address, MarketplaceJSON.abi, signer)
         //create an NFT Token
-        let transaction = await contract.getAllNFTs()
+        let transaction = await contract.getMyNFTs()
+        console.log("My NFTs", transaction);
         let sumPrice = 0;
         const items = await Promise.all(transaction.map(async i => {
             const tokenURI = await contract.tokenURI(i.tokenId);
