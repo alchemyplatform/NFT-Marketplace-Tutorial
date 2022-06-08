@@ -32,7 +32,18 @@ function updateButton() {
   ethereumButton.classList.add("hover:bg-green-70");
   ethereumButton.classList.add("bg-green-500");
 }
+
 async function connectWebsite() {
+
+    const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+    if(chainId !== '0x4')
+    {
+      //alert('Incorrect network! Switch your metamask network to Rinkeby');
+      await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: '0x4' }],
+     })
+    }  
     await window.ethereum.request({ method: 'eth_requestAccounts' })
       .then(() => {
         updateButton();
