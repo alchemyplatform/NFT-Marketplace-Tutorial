@@ -14,6 +14,15 @@ function Navbar() {
 
 const [connected, toggleConnect] = useState(false);
 const location = useLocation();
+const [currAddress, updateAddress] = useState('0x');
+
+async function getAddress() {
+  const ethers = require("ethers");
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const addr = await signer.getAddress();
+  updateAddress(addr);
+}
 
 function updateButton() {
   const ethereumButton = document.querySelector('.enableEthereumButton');
@@ -27,6 +36,8 @@ async function connectWebsite() {
     await window.ethereum.request({ method: 'eth_requestAccounts' })
       .then(() => {
         updateButton();
+        console.log("here");
+        getAddress();
         window.location.replace(location.pathname)
       });
 }
@@ -35,6 +46,8 @@ async function connectWebsite() {
     let val = window.ethereum.isConnected();
     if(val)
     {
+      console.log("here");
+      getAddress();
       toggleConnect(val);
       updateButton();
     }
@@ -89,6 +102,9 @@ async function connectWebsite() {
           </li>
           </ul>
         </nav>
+        <div className='text-white text-bold text-right mr-10 text-sm'>
+          {currAddress !== "0x" ? "Connected to":"Not Connected"} {currAddress !== "0x" ? (currAddress.substring(0,15)+'...'):""}
+        </div>
       </div>
     );
   }
