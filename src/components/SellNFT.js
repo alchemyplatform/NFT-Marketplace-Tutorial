@@ -3,6 +3,7 @@ import { useState } from "react";
 import { uploadFileToIPFS, uploadJSONToIPFS } from "../pinata";
 import Web3Modal from 'web3modal';
 import Marketplace from '../Marketplace.json';
+import { useLocation } from "react-router";
 
 export default function SellNFT () {
     const [formParams, updateFormParams] = useState({ name: '', description: '', price: ''});
@@ -10,6 +11,7 @@ export default function SellNFT () {
     const web3Modal = new Web3Modal();
     const ethers = require("ethers");
     const [message, updateMessage] = useState('');
+    const location = useLocation();
 
     async function OnChangeFile(e) {
         var file = e.target.files[0];
@@ -49,7 +51,7 @@ export default function SellNFT () {
 
     async function listNFT(e) {
         e.preventDefault();
-        
+
         //Upload data to IPFS
         try {
             const metadataURL = await uploadMetadataToIPFS();
@@ -69,9 +71,10 @@ export default function SellNFT () {
             alert("Successfully listed your NFT!");
             updateMessage("");
             updateFormParams({ name: '', description: '', price: ''});
+            window.location.replace("/")
         }
         catch(e) {
-            alert("Upload error", e)
+            alert("Upload error"+e)
         }
     }
 
