@@ -16,6 +16,7 @@ export default function SellNFT () {
         var file = e.target.files[0];
         //check for file extension
         try {
+            //upload the file to IPFS
             const response = await uploadFileToIPFS(file);
             if(response.success === true) {
                 console.log("Uploaded image to Pinata: ", response.pinataURL)
@@ -30,6 +31,7 @@ export default function SellNFT () {
     //This function uploads the metadata to IPDS
     async function uploadMetadataToIPFS() {
         const {name, description, price} = formParams;
+        //Make sure that none of the fields are empty
         if( !name || !description || !price || !fileURL)
             return;
 
@@ -38,6 +40,7 @@ export default function SellNFT () {
         }
 
         try {
+            //upload the metadata JSON to IPFS
             const response = await uploadJSONToIPFS(nftJSON);
             if(response.success === true){
                 console.log("Uploaded JSON to Pinata: ", response)
