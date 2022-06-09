@@ -1,5 +1,4 @@
 import Navbar from "./Navbar";
-//import { getTiles } from "./Marketplace";
 import { useLocation, useParams } from 'react-router-dom';
 import MarketplaceJSON from "../Marketplace.json";
 import axios from "axios";
@@ -15,16 +14,24 @@ export default function Profile () {
 
     async function getNFTData(tokenId) {
         const ethers = require("ethers");
+        let sumPrice = 0;
+
         //After adding your Hardhat network to your metamask, this code will get providers and signers
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
         const addr = await signer.getAddress();
+
         //Pull the deployed contract instance
         let contract = new ethers.Contract(MarketplaceJSON.address, MarketplaceJSON.abi, signer)
+
         //create an NFT Token
         let transaction = await contract.getMyNFTs()
-        console.log("My NFTs", transaction);
-        let sumPrice = 0;
+
+        /*
+        * Below function takes the metadata from tokenURI and the data returned by getMyNFTs() contract function
+        * and creates an object of information that is to be displayed
+        */
+        
         const items = await Promise.all(transaction.map(async i => {
             const tokenURI = await contract.tokenURI(i.tokenId);
             let meta = await axios.get(tokenURI);
@@ -55,7 +62,6 @@ export default function Profile () {
     if(!dataFetched)
         getNFTData(tokenId);
 
-    //var abc = getTiles(address);
     return (
         <div>
             <Navbar></Navbar>

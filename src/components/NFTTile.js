@@ -1,11 +1,7 @@
 import axie from "../tile.jpeg";
 import {
     BrowserRouter as Router,
-    Switch,
-    Route,
     Link,
-    useRouteMatch,
-    useParams
   } from "react-router-dom";
 
 function NFTTile (data) {

@@ -67,22 +67,29 @@ contract NFTMarketplace is ERC721URIStorage {
 
     //The first time a token is created, it is listed here
     function createToken(string memory tokenURI, uint256 price) public payable returns (uint) {
+        //Increment the tokenId counter, which is keeping track of the number of minted NFTs
         _tokenIds.increment();
         uint256 newTokenId = _tokenIds.current();
 
-        //Mint the token
+        //Mint the NFT with tokenId newTokenId to the address who called createToken
         _safeMint(msg.sender, newTokenId);
-        //Map to a tokenURI
+
+        //Map the tokenId to the tokenURI (which is an IPFS URL with the NFT metadata)
         _setTokenURI(newTokenId, tokenURI);
+
+        //Helper function to update Global variables and emit an event
         createListedToken(newTokenId, price);
 
         return newTokenId;
     }
 
     function createListedToken(uint256 tokenId, uint256 price) private {
-        require(msg.value == listPrice, "Hopefully sending the correct price"); //The marketplace wants its fee 
-        require(price > 0, "Make sure the price isn't negative"); //Just sanity check
+        //Make sure the sender sent enough ETH to pay for listing
+        require(msg.value == listPrice, "Hopefully sending the correct price");
+        //Just sanity check
+        require(price > 0, "Make sure the price isn't negative");
 
+        //Update the mapping of tokenId's to Token details, useful for retrieval functions
         idToListedToken[tokenId] = ListedToken(
             tokenId,
             payable(address(this)),
@@ -92,6 +99,7 @@ contract NFTMarketplace is ERC721URIStorage {
         );
 
         _transfer(msg.sender, address(this), tokenId);
+        //Emit the event for successful transfer. The frontend parses this message and updates the end user
         emit TokenListedSuccess(
             tokenId,
             address(this),
