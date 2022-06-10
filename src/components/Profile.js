@@ -6,7 +6,6 @@ import { useState } from "react";
 import NFTTile from "./NFTTile";
 
 export default function Profile () {
-
     const [data, updateData] = useState([]);
     const [dataFetched, updateFetched] = useState(false);
     const [address, updateAddress] = useState("0x");
@@ -15,7 +14,6 @@ export default function Profile () {
     async function getNFTData(tokenId) {
         const ethers = require("ethers");
         let sumPrice = 0;
-
         //After adding your Hardhat network to your metamask, this code will get providers and signers
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
@@ -63,9 +61,9 @@ export default function Profile () {
         getNFTData(tokenId);
 
     return (
-        <div>
+        <div className="profileClass" style={{"min-height":"100vh"}}>
             <Navbar></Navbar>
-            <div className="">
+            <div className="profileClass">
             <div className="flex text-center flex-col mt-11 md:text-2xl text-white">
                 <div className="mb-5">
                     <h2 className="font-bold">Wallet Address</h2>  
@@ -88,6 +86,9 @@ export default function Profile () {
                     {data.map((value, index) => {
                     return <NFTTile data={value} key={index}></NFTTile>;
                     })}
+                </div>
+                <div className="mt-10 text-xl">
+                    {data.length == 0 ? "Oops, No NFT data to display (Are you logged in?)":""}
                 </div>
             </div>
             </div>

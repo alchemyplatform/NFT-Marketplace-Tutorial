@@ -85,7 +85,7 @@ export default function SellNFT () {
         }
     }
 
-    console.log(process.env);
+    console.log("Working", process.env);
     return (
         <div className="">
         <Navbar></Navbar>
