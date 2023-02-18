@@ -169,7 +169,8 @@ contract NFTMarketplace is ERC721URIStorage {
         _transfer(address(this), msg.sender, tokenId);
         //approve the marketplace to sell NFTs on your behalf
         approve(address(this), tokenId);
-
+         transferFrom(msg.sender,address(this),tokenId);
+                
         //Transfer the listing fee to the marketplace creator
         payable(owner).transfer(listPrice);
         //Transfer the proceeds from the sale to the seller of the NFT
