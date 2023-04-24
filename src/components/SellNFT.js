@@ -11,14 +11,32 @@ export default function SellNFT () {
     const [message, updateMessage] = useState('');
     const location = useLocation();
 
+    async function disableButton() {
+        const listButton = document.getElementById("list-button")
+        listButton.disabled = true
+        listButton.style.backgroundColor = "grey";
+        listButton.style.opacity = 0.3;
+    }
+
+    async function enableButton() {
+        const listButton = document.getElementById("list-button")
+        listButton.disabled = false
+        listButton.style.backgroundColor = "#A500FF";
+        listButton.style.opacity = 1;
+    }
+
     //This function uploads the NFT image to IPFS
     async function OnChangeFile(e) {
         var file = e.target.files[0];
         //check for file extension
         try {
             //upload the file to IPFS
+            disableButton();
+            updateMessage("Uploading image.. please dont click anything!")
             const response = await uploadFileToIPFS(file);
             if(response.success === true) {
+                enableButton();
+                updateMessage("")
                 console.log("Uploaded image to Pinata: ", response.pinataURL)
                 setFileURL(response.pinataURL);
             }
@@ -33,7 +51,10 @@ export default function SellNFT () {
         const {name, description, price} = formParams;
         //Make sure that none of the fields are empty
         if( !name || !description || !price || !fileURL)
-            return;
+        {
+            updateMessage("Please fill all the fields!")
+            return -1;
+        }
 
         const nftJSON = {
             name, description, price, image: fileURL
@@ -58,10 +79,13 @@ export default function SellNFT () {
         //Upload data to IPFS
         try {
             const metadataURL = await uploadMetadataToIPFS();
+            if(metadataURL === -1)
+                return;
             //After adding your Hardhat network to your metamask, this code will get providers and signers
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             const signer = provider.getSigner();
-            updateMessage("Please wait.. uploading (upto 5 mins)")
+            disableButton();
+            updateMessage("Uploading NFT(takes 5 mins).. please dont click anything!")
 
             //Pull the deployed contract instance
             let contract = new ethers.Contract(Marketplace.address, Marketplace.abi, signer)
@@ -76,6 +100,7 @@ export default function SellNFT () {
             await transaction.wait()
 
             alert("Successfully listed your NFT!");
+            enableButton();
             updateMessage("");
             updateFormParams({ name: '', description: '', price: ''});
             window.location.replace("/")
@@ -105,12 +130,12 @@ export default function SellNFT () {
                     <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="number" placeholder="Min 0.01 ETH" step="0.01" value={formParams.price} onChange={e => updateFormParams({...formParams, price: e.target.value})}></input>
                 </div>
                 <div>
-                    <label className="block text-purple-500 text-sm font-bold mb-2" htmlFor="image">Upload Image</label>
+                    <label className="block text-purple-500 text-sm font-bold mb-2" htmlFor="image">Upload Image (&lt;500 KB)</label>
                     <input type={"file"} onChange={OnChangeFile}></input>
                 </div>
                 <br></br>
-                <div className="text-green text-center">{message}</div>
-                <button onClick={listNFT} className="font-bold mt-10 w-full bg-purple-500 text-white rounded p-2 shadow-lg">
+                <div className="text-red-500 text-center">{message}</div>
+                <button onClick={listNFT} className="font-bold mt-10 w-full bg-purple-500 text-white rounded p-2 shadow-lg" id="list-button">
                     List NFT
                 </button>
             </form>
