@@ -3,6 +3,7 @@ import NFTTile from "./NFTTile";
 import MarketplaceJSON from "../Marketplace.json";
 import axios from "axios";
 import { useState } from "react";
+import { GetIpfsUrlFromPinata } from "../utils";
 
 export default function Marketplace() {
 const sampleData = [
@@ -49,7 +50,9 @@ async function getAllNFTs() {
 
     //Fetch all the details of every NFT from the contract and display
     const items = await Promise.all(transaction.map(async i => {
-        const tokenURI = await contract.tokenURI(i.tokenId);
+        var tokenURI = await contract.tokenURI(i.tokenId);
+        console.log("getting this tokenUri", tokenURI);
+        tokenURI = GetIpfsUrlFromPinata(tokenURI);
         let meta = await axios.get(tokenURI);
         meta = meta.data;
 
