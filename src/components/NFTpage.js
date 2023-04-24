@@ -4,6 +4,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import MarketplaceJSON from "../Marketplace.json";
 import axios from "axios";
 import { useState } from "react";
+import { GetIpfsUrlFromPinata } from "../utils";
 
 export default function NFTPage (props) {
 
@@ -21,8 +22,9 @@ async function getNFTData(tokenId) {
     //Pull the deployed contract instance
     let contract = new ethers.Contract(MarketplaceJSON.address, MarketplaceJSON.abi, signer)
     //create an NFT Token
-    const tokenURI = await contract.tokenURI(tokenId);
+    var tokenURI = await contract.tokenURI(tokenId);
     const listedToken = await contract.getListedTokenForId(tokenId);
+    tokenURI = GetIpfsUrlFromPinata(tokenURI);
     let meta = await axios.get(tokenURI);
     meta = meta.data;
     console.log(listedToken);
@@ -70,6 +72,8 @@ async function buyNFT(tokenId) {
     const tokenId = params.tokenId;
     if(!dataFetched)
         getNFTData(tokenId);
+    if(typeof data.image == "string")
+        data.image = GetIpfsUrlFromPinata(data.image);
 
     return(
         <div style={{"min-height":"100vh"}}>
@@ -93,7 +97,7 @@ async function buyNFT(tokenId) {
                         Seller: <span className="text-sm">{data.seller}</span>
                     </div>
                     <div>
-                    { currAddress == data.owner || currAddress == data.seller ?
+                    { currAddress != data.owner && currAddress != data.seller ?
                         <button className="enableEthereumButton bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm" onClick={() => buyNFT(tokenId)}>Buy this NFT</button>
                         : <div className="text-emerald-700">You are the owner of this NFT</div>
                     }
