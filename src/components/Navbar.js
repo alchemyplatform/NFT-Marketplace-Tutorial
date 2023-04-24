@@ -55,6 +55,8 @@ async function connectWebsite() {
 }
 
   useEffect(() => {
+    if(window.ethereum == undefined)
+      return;
     let val = window.ethereum.isConnected();
     if(val)
     {
