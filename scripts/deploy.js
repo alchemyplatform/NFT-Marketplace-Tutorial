@@ -10,6 +10,8 @@ async function main() {
 
   await marketplace.deployed();
 
+  console.log("Deployed to:", marketplace.address);
+
   const data = {
     address: marketplace.address,
     abi: JSON.parse(marketplace.interface.format('json'))
@@ -25,3 +27,5 @@ main()
     console.error(error);
     process.exit(1);
   });
+
+// 0x1A747076D1153659aeB48b7448E7FE1b953f5366

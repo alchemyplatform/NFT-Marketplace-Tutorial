@@ -1,5 +1,6 @@
 require("@nomiclabs/hardhat-waffle");
 require("@nomiclabs/hardhat-ethers");
+require("@nomiclabs/hardhat-etherscan");
 const fs = require('fs');
 // const infuraId = fs.readFileSync(".infuraid").toString().trim() || "";
 
@@ -26,8 +27,8 @@ module.exports = {
       //accounts: [process.env.privateKey]
     },
     goerli: {
-      url: process.env.REACT_APP_ALCHEMY_API_URL,
-      accounts: [ process.env.REACT_APP_PRIVATE_KEY ]
+      url: "https://eth-goerli.g.alchemy.com/v2/jqWDdnk_js3c7ZSDY5Pn4UTBJ2OYQMuD",
+      accounts: [ "54a71ea2bcce5900eb828abf64a71aa9dbc632528d49540ef93cfc2ae32b22ea" ]
     }
   },
   solidity: {
@@ -38,5 +39,11 @@ module.exports = {
         runs: 200
       }
     }
+  },
+  etherscan: {
+    apiKey: "3426EFDQZ9A23DH7S1FCZYXKPHSH9THID2"
   }
 };
+
+// process.env.REACT_APP_ALCHEMY_API_URL,
+// process.env.REACT_APP_PRIVATE_KEY
