@@ -1,4 +1,4 @@
-# Basic NFT Marketplace end to end
+# Basic NFT Marketplace end to end turorial
 
 This code is for the Tutorial [Build your own NFT Marketplace from Scratch](https://docs.alchemy.com/alchemy/) built by [alchemy.com](https://alchemy.com)
 
